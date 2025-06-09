@@ -22,6 +22,8 @@ package org.apache.gravitino.lineage;
 import io.openlineage.server.OpenLineage.Job;
 import io.openlineage.server.OpenLineage.Run;
 import io.openlineage.server.OpenLineage.RunEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Utils {
   private Utils() {}
@@ -33,6 +35,10 @@ public class Utils {
 
   public static String getJobName(RunEvent event) {
     Job job = event.getJob();
-    return job == null ? "Unknown" : job.getName();
+    if (job == null) {
+	logger.warn("No Job object found in RunEvent; returning 'Unknown'");
+    	return "Unknown"
+    }
+    return job.getName();
   }
 }
